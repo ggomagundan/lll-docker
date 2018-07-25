@@ -1,0 +1,14 @@
+FROM alpine:3.8
+MAINTAINER KaiPark <ggogun@gmail.com>
+
+ENV GIT_URL https://github.com/ethereum/solidity.git
+RUN mkdir solidity
+WORKDIR /solidity
+
+RUN apk add build-base cmake boost-dev git
+RUN git clone --recursive $GIT_URL
+
+RUN cd solidity && mkdir build && cd build && cmake .. && make && make install
+RUN cd solidity/build/lllc && cp lllc /usr/local/bin/
+
+VOLUME ["/solidity/source"]
